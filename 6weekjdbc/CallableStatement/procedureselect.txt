@@ -1,0 +1,11 @@
+CREATE OR REPLACE PROCEDURE getUserById(p_userid IN employee.ID%TYPE,
+	   o_username OUT employee.EMPNAME%TYPE,
+	   o_salary  OUT employee.EMPSALARY%TYPE)
+IS
+BEGIN
+  SELECT EMPNAME ,EMPSALARY
+  INTO o_username, o_salary 
+  FROM  employee WHERE  ID= p_userid;
+ 
+END;
+/

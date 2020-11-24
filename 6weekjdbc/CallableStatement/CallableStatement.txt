@@ -1,0 +1,101 @@
+Stored Procedures are group of statements that we compile in the database for some task. Stored procedures are beneficial when we are dealing with multiple tables with complex scenario and rather than sending multiple queries to the database, we can send required data to the stored procedure and have the logic executed in the database server itself.
+
+JDBC API provides support to execute Stored Procedures through CallableStatement interface. Stored Procedures requires to be written in the database specific syntax 
+
+A java.sql.CallableStatement is used to call stored procedures in a database.
+
+A stored procedure is like a function or method in a class, except it lives inside the database. Some database heavy operations may benefit performance-wise from being executed inside the same memory space as the database server, as a stored procedure.
+Creating a CallableStatement
+ The database stored procedure can be in following form :
+
+    Without parameter
+    With input parameter
+    With output parameter
+    With input and output parameter
+
+
+You create an instance of a CallableStatement by calling the prepareCall() method on a connection object. Here is an example:
+
+CallableStatement callableStatement =
+    connection.prepareCall("{call calculateStatistics(?, ?)}");
+
+If the stored procedure returns a ResultSet, and you need a non-default ResultSet (e.g. with different holdability, concurrency etc. characteristics), you will need to specify these characteristics already when creating the CallableStatement. Here is an example:
+
+CallableStatement callableStatement =
+    connection.prepareCall("{call calculateStatistics(?, ?)}",
+        ResultSet.TYPE_FORWARD_ONLY,
+        ResultSet.CONCUR_READ_ONLY,
+        ResultSet.CLOSE_CURSORS_OVER_COMMIT
+    );
+
+Setting Parameter Values
+
+Once created, a CallableStatement is very similar to a PreparedStatement. For instance, you can set parameters into the SQL, at the places where you put a ? . Here is an example:
+
+CallableStatement callableStatement =
+    connection.prepareCall("{call calculateStatistics(?, ?)}");
+
+callableStatement.setString(1, "param1");
+callableStatement.setInt   (2, 123);
+
+Executing the CallableStatement
+
+Once you have set the parameter values you need to set, you are ready to execute the CallableStatement. Here is how that is done:
+
+ResultSet result = callableStatement.executeQuery();
+
+The executeQuery() method is used if the stored procedure returns a ResultSet.
+
+If the stored procedure just updates the database, you can call the executeUpdate() method instead, like this:
+
+callableStatement.executeUpdate();
+
+Batch Updates
+
+You can group multiple calls to a stored procedure into a batch update. Here is how that is done:
+
+CallableStatement callableStatement =
+    connection.prepareCall("{call calculateStatistics(?, ?)}");
+
+callableStatement.setString(1, "param1");
+callableStatement.setInt   (2, 123);
+callableStatement.addBatch();
+
+callableStatement.setString(1, "param2");
+callableStatement.setInt   (2, 456);
+callableStatement.addBatch();
+
+int[] updateCounts = callableStatement.executeBatch();
+
+OUT Parameters
+
+A stored procedure may return OUT parameters. That is, values that are returned instead of, or in addition to, a ResultSet. After executing the CallableStatement you can then access these OUT parameters from the CallableStatement object. Here is an example:
+
+CallableStatement callableStatement =
+    connection.prepareCall("{call calculateStatistics(?, ?)}");
+
+callableStatement.setString(1, "param1");
+callableStatement.setInt   (2, 123);
+
+callableStatement.registerOutParameter(1, java.sql.Types.VARCHAR);
+callableStatement.registerOutParameter(2, java.sql.Types.INTEGER);
+
+ResultSet result = callableStatement.executeQuery();
+while(result.next()) { ... }
+
+String out1 = callableStatement.getString(1);
+int    out2 = callableStatement.getInt   (2);
+
+It is recommended that you first process the ResultSet before trying to access any OUT parameters. This is recommended for database compatibility reasons.
+
+
+
+private    static void dropProcedure() {
+        Connection con = getConnection();
+        Statement stmt =null;
+        try {
+            stmt = con.createStatement();
+            stmt.execute("DROP PROCEDURE IF EXISTS `mydb`.`WhoAreThey`");
+        } catch(SQLException ex) {
+            System.err.println("SQLException: " + ex.getMessage());
+        }

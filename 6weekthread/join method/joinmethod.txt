@@ -1,0 +1,14 @@
+Join method from Thread class is an important method and used to impose order on execution of multiple Threads. Concept of joining multiple threads is very popular on  mutithreading interview question. Here is one of such question, “You have three threads T1, T2 and T3, How do you ensure that they finish in order T1, T2, T3 ?. This question illustrate power of join method on multithreaded programming.
+
+This one is bit tricky. You can do this by using join method, by calling T1.join() from T2 and T2.join() from T3. In this case thread T1 will finish first, followed by T2 and T3
+
+ 1. Join is a final method in java.lang.Thread class and you cannot override it.
+2) Join method throw IntrupptedException if another thread interrupted waiting thread as a result of join() call.
+
+3) Join is also an overloaded method in Java
+ join(long milisec)
+
+
+
+
+

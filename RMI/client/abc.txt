@@ -1,0 +1,12 @@
+No sourcepublic final class my.MyServer_Stub extends java.rmi.server.RemoteStub implements my.MyRemote, java.rmi.Remote {
+    static java.lang.Class class$java$rmi$server$RemoteRef;
+    static java.lang.Class class$java$rmi$Remote;
+    static java.lang.Class class$java$lang$reflect$Method;
+    static java.lang.Class array$Ljava$lang$Object;
+    static java.lang.Class class$my$MyRemote;
+    static {};
+    public my.MyServer_Stub();
+    public my.MyServer_Stub(java.rmi.server.RemoteRef);
+    public int add(int, int) throws java.rmi.RemoteException;
+    static java.lang.Class class$(java.lang.String);
+}

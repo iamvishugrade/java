@@ -1,0 +1,172 @@
+what is serialVersionUID?
+
+The serialVersionUID is used as a version control in a Serializable class. If you do not explicitly declare a serialVersionUID, JVM will do it for you automatically, based on various aspects of your Serializable class
+
+import java.io.Serializable;
+ 
+public class Address implements Serializable{
+ 
+	   private static final long serialVersionUID = 1L;
+	
+	   String street;
+	   String country;
+ 
+	   public void setStreet(String street){
+		   this.street = street;
+	   }
+ 
+	   public void setCountry(String country){
+		   this.country = country;
+	   }
+ 
+	   public String getStreet(){
+		   return this.street;
+	   }
+ 
+	   public String getCountry(){
+		   return this.country;
+	   }
+ 
+	   @Override
+	   public String toString() {
+    	   return new StringBuffer(" Street : ")
+    	   .append(this.street)
+    	   .append(" Country : ")
+    	   .append(this.country).toString();
+	   }
+}
+
+1.2 WriteObject.java
+
+A simple class to write / serialize the Address object into a file – “c:\\address.ser”.
+
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+ 
+public class WriteObject{
+ 
+	public static void main (String args[]) {
+	 
+	   Address address = new Address();
+	   address.setStreet("wall street");
+	   address.setCountry("united states");
+ 
+	   try{
+ 
+		FileOutputStream fout = new FileOutputStream("c:\\address.ser");
+		ObjectOutputStream oos = new ObjectOutputStream(fout);   
+		oos.writeObject(address);
+		oos.close();
+		System.out.println("Done");
+ 
+	   }catch(Exception ex){
+		   ex.printStackTrace();
+	   } 
+	}
+}
+
+1.3 ReadObject.java
+
+A simple class to read / deserialize the Address object from file – “c:\\address.ser”.
+
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+ 
+public class ReadObject{
+ 
+   public static void main (String args[]) {
+ 
+	   Address address;
+	   
+	   try{
+ 
+		   FileInputStream fin = new FileInputStream("c:\\address.ser");
+		   ObjectInputStream ois = new ObjectInputStream(fin);
+		   address = (Address) ois.readObject();
+		   ois.close();
+ 
+		   System.out.println(address);
+		   
+	   }catch(Exception ex){
+		   ex.printStackTrace(); 
+	   } 
+   }
+}
+
+2. Testing
+
+Let do some testing to demonstrate the use of serialVersionUID.
+2.1 Same serialVersionUID
+
+Same serialVersionUID , there is no problem during the deserialization process
+
+javac Address.java
+javac WriteObject.java
+javac ReadObject.java
+java WriteObject
+java ReadObject
+Street : wall street Country : united states
+
+2.2 Different serialVersionUID
+
+In Address.java, change the serialVersionUID to 2L (it was 1L), and compile it again.
+
+javac Address.java
+java ReadObject
+java.io.InvalidClassException: Address; local class incompatible: 
+stream classdesc serialVersionUID = 1, local class serialVersionUID = 2
+        ... 
+        at ReadObject.main(ReadObject.java:14)
+
+The “InvalidClassException” will raise, because you write a serialization class with serialVersionUID “1L” but try to retrieve it back with updated serialization class, serialVersionUID “2L”.
+
+    The serialVersionUID have to match during the serialization and deserialization process.
+
+When should update your serialVersionUID?
+When your serialization class is updated with some incompatible Java type changes to a serializable class, you have to update your serialVersionUID.
+
+For detail about the compatible and incompatible Java type changes to a serializable class, see the Java Object Serialization Specification.
+3. What’s wrong with the default serialVersionUID?
+
+If no serialVersionUID is declared, JVM will use its own algorithm to generate a default SerialVersionUID
+
+The default serialVersionUID computation is highly sensitive to class details and may vary from different JVM implementation, and result in an unexpected InvalidClassExceptions during the deserialization process.
+3.1 Client / Server environment
+
+– Client is using SUN’s JVM in Windows.
+– Server is using JRockit in Linux.
+
+The client sends a serializable class with default generated serialVersionUID (e.g 123L) to the server over socket, the server may generate a different serialVersionUID (e.g 124L) during deserialization process, and raises an unexpected InvalidClassExceptions.
+3.2 File / Database environment
+
+– App #1 is using SUN’s JVM in Windows.
+– App #2 is using JRockit in Linux.
+
+Serialization has allowed to save into a file or database. App #1 stores a serializable class into database by default generated serialVersionUID (e.g 123L), while App #2 may generate a different serialVersionUID (e.g 124L) during deserialization process, and raise an unexpected InvalidClassExceptions.
+
+You can check here for the List of the JVM implementation.
+4. How to generate serialVersionUID
+
+You can use JDK “serialver” or Eclipse IDE to generate serialVersionUID automatically, see detail.
+Conclusion
+
+SUN is highly recommended developers to declare the serialVersionUID in order to avoid the different JVM issue listed above, however I rather recommend you should understand what is serialization, how serialVersionUID implement version control and why your class need to use serialization. Understand the serialVersionUID concept is better than blindfold to any recommendation.
+
+By the way JDK also provides a tool called serialver, located in bin directory of JAVA_HOME folder, in my machine C:\Program Files\Java\jdk1.6.0_26\bin\serialver.exe, which can be used to generate SerialVersionUID for old classes. This is very helpful, in case you have made changes in your class, which is breaking Serialization and your application is not able to reload serialized instances. You can simply use this tool to create SerialVersionUID for old instances and then use it explicitly in your class by declaring a private, static, final and long SerialVersionUID field. By the way, it's highly recommend, both due to performance and security reason to use customized binary format for Serialization, once again Effective Java has couple of Items, which explains benefits of custom format in great details.
+
+ How to use serialver JDK tool to generate SerialVersionUID
+You can use JDK's serialver tool to generate SerialVersionUID for classes. This is particularly useful for evolving classes, it returns SerialVersionUID in format easy to copy. You can use serialver JDK tool as shown in below example :
+
+$ serialver
+use: serialver [-classpath classpath] [-show] [classname...]
+
+$ serialver -classpath . Hello
+Class Hello is not Serializable.
+
+$ serialver -classpath . Hello
+Hello:    static final long SerialVersionUID = -4862926644813433707L;
+
+
+
+
+

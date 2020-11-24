@@ -1,0 +1,7 @@
+
+create or replace  procedure recins88(id in emp23.id%type,name in emp23.name%type) as
+    begin
+    insert into emp23
+   values(id,name);
+   end;
+    /

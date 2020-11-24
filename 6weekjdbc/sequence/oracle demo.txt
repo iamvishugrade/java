@@ -1,0 +1,47 @@
+login:
+1)create table emp1(id int);
+2)alter table emp add primary key(id);
+  //now it wont take duplicate values
+3)create sequence seq1
+increment by 1
+start with 100
+maxvalue 200;
+//now it will start from 100, with an increment of 5, till 200
+4)insert into emp11 values(seq1.nextval);
+//now emp values started from 100,105,110,115...200
+5)select * from v$tablespace;
+//it will show like
+     TS# NAME                           INC BIG FLA ENC
+-------- ------------------------------ --- --- --- -
+       0 SYSTEM                       YES NO  YES
+       1 UNDO                           YES NO  YES
+       2 SYSAUX                       YES NO  YES
+       4 USERS                         YES NO  YES
+       3 TEMP                            NO  NO  YES
+//.DBFis the extension
+6)create user ram
+identified by r123
+default tablespace users;
+7)select name from v$datafile;
+//for showing path
+8)create tablespace acc datafile 'c:\ORACLEEXE\ORADATA\XE\acc01.DBF' size 5m;
+//for creating tablespace
+9)create user ram1
+identified by r123
+default tablespace acc
+quota 2m on acc;
+10)grant create session,create table to ram;
+//for permission
+11)connected ram
+enter paswd:r123
+connected
+12) create table emp(id number(3),name varchar2(10));
+13)select tablespace_name from user_tables;
+     TABLESPACE- NAME                      
+-------- ------------------------------ --- --- --- -
+   Acc
+
+14)alter table adrs add foreign key(id)references emp;
+15)insert into adrs values(100,'c1');
+     insert into adrs values(110,'c1');
+//it will insert only those entry which are present its reference table

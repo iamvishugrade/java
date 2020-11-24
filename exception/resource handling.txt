@@ -1,0 +1,70 @@
+static String readFirstLineFromFile(String path) throws IOException 
+{
+  try (BufferedReader br = new BufferedReader(new FileReader(path))) 
+{
+int  x=10/0;
+    return br.readLine();
+  }
+
+}
+
+In this example, the resource declared in the try-with-resources statement is a BufferedReader. The declaration statement appears within parentheses immediately after the try keyword. The class BufferedReader, in Java SE 7 and later, implements the interface java.lang.AutoCloseable. Because the BufferedReader instance is declared in a try-with-resource statement, it will be closed regardless of whether the try statement completes normally or abruptly (as a result of the method BufferedReader.readLine throwing an IOException).
+private static void printFileJava7() throws IOException {
+
+    try(FileInputStream input = new FileInputStream("file.txt")) {
+
+        int data = input.read();
+        while(data != -1){
+            System.out.print((char) data);
+            data = input.read();
+        }
+    }
+}
+
+Using Multiple Resources
+
+You can use multiple resources inside a try-with-resources block and have them all automatically closed. Here is an example:
+
+private static void printFileJava7() throws IOException {
+
+    try(  FileInputStream     input         = new FileInputStream("file.txt");
+          BufferedInputStream bufferedInput = new BufferedInputStream(input)
+    ) {
+
+        int data = bufferedInput.read();
+        while(data != -1){
+            System.out.print((char) data);
+    data = bufferedInput.read();
+        }
+    }
+}
+
+This example creates two resources inside the parentheses after the try keyword. An FileInputStream and a BufferedInputStream. Both of these resources will be closed automatically when execution leaves the try block.
+
+The resources will be closed in reverse order of the order in which they are created / listed inside the parentheses. First the BufferedInputStream will be closed, then the FileInputStream. 
+
+
+
+
+
+
+
+
+
+package com.journaldev.util;
+ 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+ 
+public class Java7ResourceManagement {
+ 
+    public static void main(String[] args) {
+        try (BufferedReader br = new BufferedReader(new FileReader(
+                "C:\\abc.txt"))) {
+            System.out.println(br.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

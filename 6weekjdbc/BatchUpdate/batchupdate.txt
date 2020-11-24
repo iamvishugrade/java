@@ -1,0 +1,72 @@
+ A batch update is a batch of updates grouped together, and sent to the database in one "batch", rather than sending the updates one by one.
+
+Sending a batch of updates to the database in one go, is faster than sending them one by one, waiting for each one to finish. There is less network traffic involved in sending one batch of updates (only 1 round trip), and the database might be able to execute some of the updates in parallel. The speed up compared to executing the updates one by one, can be quite big.
+
+You can batch both SQL inserts, updates and deletes. It does not make sense to batch select statements.
+
+There are three ways to execute batch updates:
+
+    Using a Statement
+    Using a PreparedStatement
+    Using a CallableStatement
+
+
+This text explains both ways.
+Statement Batch Updates
+
+You can use a Statement object to execute batch updates. You do so using the addBatch() and executeBatch() methods. Here is an example:
+
+Statement statement = null;
+
+try{
+    statement = connection.createStatement();
+
+    statement.addBatch("update people set firstname='John' where id=123");
+    statement.addBatch("update people set firstname='Eric' where id=456");
+    statement.addBatch("update people set firstname='May'  where id=789");
+
+    int[] recordsAffected = statement.executeBatch();
+} finally {
+    if(statement != null) statement.close();
+}
+
+First you add the SQL statements to be executed in the batch, using the addBatch() method.
+
+Then you execute the SQL statements using the executeBatch(). The int[] array returned by the executeBatch() method is an array of int telling how many records were affected by each executed SQL statement in the batch.
+PreparedStatement Batch Updates
+
+You can also use a PreparedStatement object to execute batch updates. The PreparedStatement enables you to reuse the same SQL statement, and just insert new parameters into it, for each update to execute. Here is an example:
+
+String sql = "update people set firstname=? , lastname=? where id=?";
+
+
+PreparedStatement preparedStatement = null;
+try{
+    preparedStatement =
+            connection.prepareStatement(sql);
+
+    preparedStatement.setString(1, "Gary");
+    preparedStatement.setString(2, "Larson");
+    preparedStatement.setLong  (3, 123);
+
+    preparedStatement.addBatch();
+
+    preparedStatement.setString(1, "Stan");
+    preparedStatement.setString(2, "Lee");
+    preparedStatement.setLong  (3, 456);
+
+    preparedStatement.addBatch();
+
+    int[] affectedRecords = preparedStatement.executeBatch();
+
+}finally {
+    if(preparedStatement != null) {
+        preparedStatement.close();
+    }
+}
+
+First a PreparedStatement is created from an SQL statement with question marks in, to show where the parameter values are to be inserted into the SQL.
+
+Second, each set of parameter values are inserted into the preparedStatement, and the addBatch() method is called. This adds the parameter values to the batch internally. You can now add another set of values, to be inserted into the SQL statement. Each set of parameters are inserted into the SQL and executed separately, once the full batch is sent to the database.
+
+Third, the executeBatch() method is called, which executes all the batch updates. The SQL statement plus the parameter sets are sent to the database in one go. The int[] array returned by the executeBatch() method is an array of int telling how many records were affected by each executed SQL statement in the batch. 

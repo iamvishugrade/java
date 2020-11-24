@@ -1,0 +1,3 @@
+PATH=/linux/jdk1.6.0_07/bin:$PATH
+export $PATH
+put  thease commands into profile file which is stored in etc folder in linux

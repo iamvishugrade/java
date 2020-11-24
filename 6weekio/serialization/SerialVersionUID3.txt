@@ -1,0 +1,36 @@
+when we don't declare SerialVersionUID, as a static, final and long value in our class, Serialization mechanism creates it for us. This mechanism is sensitive to many details including fields in your class, there access modifier, the interface they implement and even different Compiler implementations, any change on class or using different compiler may result in different SerialVersionUID, which many eventually stop reloading serialized data. It's too risky to rely on Java Serialization mechanism for generating this id, and that's why it's recommended to declare explicit SerialVersionUID in your Serializable class
+
+ How to use serialver JDK tool to generate SerialVersionUID
+You can use JDK's serialver tool to generate SerialVersionUID for classes. This is particularly useful for evolving classes, it returns SerialVersionUID in format easy to copy. You can use serialver JDK tool as shown in below example :
+
+$ serialver
+use: serialver [-classpath classpath] [-show] [classname...]
+
+$ serialver -classpath . Hello
+Class Hello is not Serializable.
+
+$ serialver -classpath . Hello
+Hello:    static final long SerialVersionUID = -4862926644813433707L;
+
+
+Now we know what is SerialVersionUID and why it's important to declare it in Serializable class, it's time to revise some of the important fact, related to Java SerialVersionUID.
+
+1) SerialVersionUID is used to version serialized data. You can only de-serialize a class if it's SerialVersionUID matches with the serialized instance.
+
+2) When we don't declare SerialVersionUID in our class, Java runtime generates it for us, but that process is sensitive to many class meta data including number of fields, type of fields, access modifier of fields, interface implemented by class etc. You can find accurate information in Serialization documentation from Oracle.
+
+3) It's recommended to declare SerialVersionUID as private static final long variable to avoid default mechanism
+
+4) You can even use serialver tool from JDK to generate Serial Version for classes in Java. It also has a GUI, which can be enable by passing -show parameter.
+
+5) It's Serialization best practice in Java to explicitly declare SerialVersionUID, to avoid any issues during de-serialization especially if you are running a client server application which relies on serialized data e.g. RMI.
+
+
+
+
+
+
+
+
+
+

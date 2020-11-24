@@ -1,0 +1,137 @@
+if you want to execute a Statement object many times, it usually reduces execution time to use a PreparedStatement object instead.
+
+The main feature of a PreparedStatement object is that, unlike a Statement object, it is given a SQL statement when it is created. The advantage to this is that in most cases, this SQL statement is sent to the DBMS right away, where it is compiled. As a result, the PreparedStatement object contains not just a SQL statement, but a SQL statement that has been precompiled. This means that when the PreparedStatement is executed, the DBMS can just run the PreparedStatement SQL statement without having to compile it first.
+
+ A PreparedStatement is a special kind of Statement object with some useful features. Remember, you need a Statement in order to execute either a query or an update. You can use a PreparedStatement instead of a Statement and benefit from the features of the PreparedStatement.
+
+The PreparedStatement's primary features are:
+
+    Easy to insert parameters into the SQL statement.
+    Easy to reuse the PreparedStatement with new parameters.
+    May increase performance of executed statements.
+    Enables easier batch updates.
+
+
+I will show you how to insert parameters into SQL statements in this text, and also how to reuse a PreparedStatement. The batch updates is explained in a separate text.
+
+Here is a quick example, to give you a sense of how it looks in code:
+
+String sql = "update people set firstname=? , lastname=? where id=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+preparedStatement.setString(1, "Gary");
+preparedStatement.setString(2, "Larson");
+preparedStatement.setLong  (3, 123);
+
+int rowsAffected = preparedStatement.executeUpdate();
+
+Creating a PreparedStatement
+
+Before you can use a PreparedStatement you must first create it. You do so using the Connection.prepareStatement(), like this:
+
+String sql = "select * from people where id=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+The PreparedStatement is now ready to have parameters inserted.
+Inserting Parameters into a PreparedStatement
+
+Everywhere you need to insert a parameter into your SQL, you write a question mark (?). For instance:
+
+String sql = "select * from people where id=?";
+
+Once a PreparedStatement is created (prepared) for the above SQL statement, you can insert parameters at the location of the question mark. This is done using the many setXXX() methods. Here is an example:
+
+preparedStatement.setLong(1, 123);
+
+The first number (1) is the index of the parameter to insert the value for. The second number (123) is the value to insert into the SQL statement.
+
+Here is the same example with a bit more details:
+
+String sql = "select * from people where id=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+preparedStatement.setLong(123);
+
+You can have more than one parameter in an SQL statement. Just insert more than one question mark. Here is a simple example:
+
+String sql = "select * from people where firstname=? and lastname=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+preparedStatement.setString(1, "John");
+preparedStatement.setString(2, "Smith");
+
+Executing the PreparedStatement
+
+Executing the PreparedStatement looks like executing a regular Statement. To execute a query, call the executeQuery() or executeUpdate method. Here is an executeQuery() example:
+
+String sql = "select * from people where firstname=? and lastname=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+preparedStatement.setString(1, "John");
+preparedStatement.setString(2, "Smith");
+
+ResultSet result = preparedStatement.executeQuery();
+
+As you can see, the executeQuery() method returns a ResultSet. Iterating the ResultSet is described in the Query the Database text.
+
+Here is an executeUpdate() example:
+
+String sql = "update people set firstname=? , lastname=? where id=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+preparedStatement.setString(1, "Gary");
+preparedStatement.setString(2, "Larson");
+preparedStatement.setLong  (3, 123);
+
+int rowsAffected = preparedStatement.executeUpdate();
+
+The executeUpdate() method is used when updating the database. It returns an int which tells how many records in the database were affected by the update.
+Reusing a PreparedStatement
+
+Once a PreparedStatement is prepared, it can be reused after execution. You reuse a PreparedStatement by setting new values for the parameters and then execute it again. Here is a simple example:
+
+String sql = "update people set firstname=? , lastname=? where id=?";
+
+PreparedStatement preparedStatement =
+        connection.prepareStatement(sql);
+
+preparedStatement.setString(1, "Gary");
+preparedStatement.setString(2, "Larson");
+preparedStatement.setLong  (3, 123);
+
+int rowsAffected = preparedStatement.executeUpdate();
+
+preparedStatement.setString(1, "Stan");
+preparedStatement.setString(2, "Lee");
+preparedStatement.setLong  (3, 456);
+
+int rowsAffected = preparedStatement.executeUpdate();
+
+This works for executing queries too, using the executeQuery() method, which returns a ResultSet.
+PreparedStatement Performance
+
+It takes time for a database to parse an SQL string, and create a query plan for it. A query plan is an analysis of how the database can execute the query in the most efficient way.
+
+If you submit a new, full SQL statement for every query or update to the database, the database has to parse the SQL and for queries create a query plan. By reusing an existing PreparedStatement you can reuse both the SQL parsing and query plan for subsequent queries. This speeds up query execution, by decreasing the parsing and query planning overhead of each execution.
+
+There are two levels of potential reuse for a PreparedStatement.
+
+    Reuse of PreparedStatement by the JDBC driver.
+    Reuse of PreparedStatement by the database.
+
+First of all, the JDBC driver can cache PreparedStatement objects internally, and thus reuse the PreparedStatement objects. This may save a little of the PreparedStatement creation time.
+
+Second, the cached parsing and query plan could potentially be reused across Java applications, for instance application servers in a cluster, using the same database.
+

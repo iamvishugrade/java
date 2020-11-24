@@ -1,0 +1,167 @@
+To open SqlPlus:
+
+1) Window Key+R
+enter sqlplus 
+
+2) Enter username:
+Enter Password:
+Connected To: Oracle Database Express Edidtion Release 10.2.0.1.0 - Production
+
+To create a table:
+
+1) create table employ(id int);
+
+To alter a table:
+
+1) alter table employ add primary key(id);
+
+To create a sequence:
+
+1) create sequence seq 
+increment by 5
+start with 100
+maxvalue 200;
+
+This sequence is increment by 5 and having its initial value 100 and by incremented by 5 upto 200 that means its last value is 200;
+
+To use sequence in a table:
+
+1) insert into employ values(seq.nextval);
+
+by repeating the same command you can insert multiple records into that table;
+
+you can show all these values by using this command 
+
+select * from employ;
+
+To see the user name of the system 
+
+1) show user;
+
+To establish a connection from database
+
+1) connect
+Enter username:
+Enter Password:
+Connected To: Oracle Database Express Edidtion Release 10.2.0.1.0 - Production
+
+2) conn
+Enter username:
+Enter Password:
+Connected To: Oracle Database Express Edidtion Release 10.2.0.1.0 - Production
+
+To show the space occupied by the drive of oracle database;
+
+1) select * from v$tablespace;
+
+       TS# NAME                           INC BIG FLA ENC
+---------- ------------------------------ --- --- --- ---
+         0 SYSTEM                         YES NO  YES
+         1 UNDO                           YES NO  YES
+         2 SYSAUX                         YES NO  YES
+         4 USERS                          YES NO  YES
+         3 TEMP                           NO  NO  YES
+    
+5 rows selected.
+
+To create a user on the system
+
+1) create user ram
+identified by r123
+default tablespace users;
+
+To show the path of stored database file of oracle database;
+
+1) select name from v$datafile;
+
+
+NAME
+--------------------------------------------------------
+
+C:\ORACLEXE\ORADATA\XE\SYSTEM.DBF
+C:\ORACLEXE\ORADATA\XE\UNDO.DBF
+C:\ORACLEXE\ORADATA\XE\SYSAUX.DBF
+C:\ORACLEXE\ORADATA\XE\USERS.DBF
+
+4 rows selected.
+
+it has extension .dbf
+
+To show the path of stored tempfile of oracle database;
+
+1) select name from v$tempfile;
+
+NAME
+--------------------------------------------------------
+
+C:\ORACLEXE\ORADATA\XE\TEMP.DBF
+
+it has extension .dbf
+
+To create tablespace
+
+1) create tablespace acc datafile 'C:\ORACLEXE\ORADATA\XE\acc01.dbf'size 5m;
+
+create user in a tablespace
+
+1) create user ram1
+identified by r123
+default tablespace acc
+quota unlimited/2m on acc;
+
+To grant previleges to a user
+
+1) grant create session,create table to ram1; 
+
+Connection established by ram1
+
+To see the all tables record from database
+
+1)select * from tab;
+
+create table in user ram1
+
+1) create table emp(id number(3),name varchar2(10));
+
+To view user table in tablespace
+
+1) select tablespace_name from user_tables;
+
+If a user want to do that work that is not granted to him then database will show you a error message
+insufficient privileges
+
+for example:
+if user wants to create sequence seq;
+though he is not granted then it will show an error message
+
+To See the description of a table;
+
+1) desc emp;
+
+create another table having same datatypes of emp table
+
+1) create table adrs(id number(3),city varchar2(10));
+
+insert data into table adrs
+
+1) insert into adrs values(100,'c1');
+
+2) insert into adrs values(110,'c1');
+
+to delete all records from a table at one time
+
+1) delete from adrs;
+
+To add a primary key into a table
+
+1) alter table emp add primary key(id);
+
+To add forgien key into a table
+
+1) alter table adrs add foreign key(id) references emp;
+
+Now if you want to enter a record in second table which have same datatype in the previous table which you had applied primary key.
+if both of have same values of primary key with their reference table values and foreign key then it will create no problem.
+but if anyone values which is not same as primary key then it will generate an error of integrity constraint violated-parent key not found
+
+alter 

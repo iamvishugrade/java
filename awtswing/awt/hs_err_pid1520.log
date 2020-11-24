@@ -1,0 +1,92 @@
+#
+# An unexpected error has been detected by Java Runtime Environment:
+#
+#  Internal Error (53484152454432554E54494D450E4350500214), pid=1520, tid=2672
+#
+# Java VM: Java HotSpot(TM) Client VM (1.6.0_03-b05 mixed mode, sharing)
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00296800):  JavaThread "main" [_thread_in_Java, id=2672]
+
+Stack: [0x00830000,0x00c30000)
+[error occurred during error reporting, step 110, id 0xc0000005]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x02dcd400 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=4080]
+  0x02dc8800 JavaThread "CompilerThread0" daemon [_thread_blocked, id=2304]
+  0x02dc7400 JavaThread "Attach Listener" daemon [_thread_blocked, id=3284]
+  0x02dc6400 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=2212]
+  0x02dbe800 JavaThread "Finalizer" daemon [_thread_blocked, id=3628]
+  0x02dbd800 JavaThread "Reference Handler" daemon [_thread_blocked, id=3052]
+=>0x00296800 JavaThread "main" [_thread_in_Java, id=2672]
+
+Other Threads:
+  0x02dbc400 VMThread [id=3064]
+  0x02dcec00 WatcherThread [id=1176]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 960K, used 644K [0x228e0000, 0x229e0000, 0x22dc0000)
+  eden space 896K,  70% used [0x228e0000, 0x2297eb80, 0x229c0000)
+  from space 64K,  14% used [0x229c0000, 0x229c2640, 0x229d0000)
+  to   space 64K,   0% used [0x229d0000, 0x229d0000, 0x229e0000)
+ tenured generation   total 7168K, used 734K [0x22dc0000, 0x234c0000, 0x268e0000)
+   the space 7168K,  10% used [0x22dc0000, 0x22e77940, 0x22e77a00, 0x234c0000)
+ compacting perm gen  total 12288K, used 1986K [0x268e0000, 0x274e0000, 0x2a8e0000)
+   the space 12288K,  16% used [0x268e0000, 0x26ad09f0, 0x26ad0a00, 0x274e0000)
+    ro space 8192K,  66% used [0x2a8e0000, 0x2ae2f860, 0x2ae2fa00, 0x2b0e0000)
+    rw space 12288K,  52% used [0x2b0e0000, 0x2b72f078, 0x2b72f200, 0x2bce0000)
+
+Dynamic libraries:
+0x00400000 - 0x0040a000 	C:\Program Files\Java\jdk1.6.0_03\bin\javac.exe
+0x7c900000 - 0x7c9b0000 	C:\WINDOWS\system32\ntdll.dll
+0x7c800000 - 0x7c8f4000 	C:\WINDOWS\system32\kernel32.dll
+0x6d010000 - 0x6d025000 	C:\Program Files\Java\jdk1.6.0_03\bin\jli.dll
+0x77dd0000 - 0x77e6b000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x77e70000 - 0x77f01000 	C:\WINDOWS\system32\RPCRT4.dll
+0x7c340000 - 0x7c396000 	C:\Program Files\Java\jdk1.6.0_03\bin\MSVCR71.dll
+0x002a0000 - 0x002f6000 	C:\Program Files\Java\jdk1.6.0_03\jre\bin\msvcr71.dll
+0x6d870000 - 0x6daba000 	C:\Program Files\Java\jdk1.6.0_03\jre\bin\client\jvm.dll
+0x77d40000 - 0x77dd0000 	C:\WINDOWS\system32\USER32.dll
+0x77f10000 - 0x77f56000 	C:\WINDOWS\system32\GDI32.dll
+0x76b40000 - 0x76b6d000 	C:\WINDOWS\system32\WINMM.dll
+0x6d3c0000 - 0x6d3c8000 	C:\Program Files\Java\jdk1.6.0_03\jre\bin\hpi.dll
+0x76bf0000 - 0x76bfb000 	C:\WINDOWS\system32\PSAPI.DLL
+0x6d820000 - 0x6d82c000 	C:\Program Files\Java\jdk1.6.0_03\jre\bin\verify.dll
+0x6d460000 - 0x6d47f000 	C:\Program Files\Java\jdk1.6.0_03\jre\bin\java.dll
+0x6d860000 - 0x6d86f000 	C:\Program Files\Java\jdk1.6.0_03\jre\bin\zip.dll
+
+VM Arguments:
+jvm_args: -Denv.class.path=C:\bea\weblogic81\server\lib\weblogic.jar;C:\oraclexe\app\oracle\product\10.2.0\server\jdbc\lib\ojdbc14.jar; -Dapplication.home=C:\Program Files\Java\jdk1.6.0_03 -Xms8m -Xss4m -ea:com.sun.tools...
+java_command: com.sun.tools.javac.Main DemoFrame2.java
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+CLASSPATH=C:\bea\weblogic81\server\lib\weblogic.jar;C:\oraclexe\app\oracle\product\10.2.0\server\jdbc\lib\ojdbc14.jar;
+PATH=C:\oraclexe\app\oracle\product\10.2.0\server\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\Program Files\Java\jdk1.6.0_03\bin;
+USERNAME=user1
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=x86 Family 15 Model 6 Stepping 4, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows XP Build 2600 Service Pack 2
+
+CPU:total 2 (2 cores per cpu, 1 threads per core) family 15 model 6 stepping 4, cmov, cx8, fxsr, mmx, sse, sse2, sse3
+
+Memory: 4k page, physical 981484k(709324k free), swap 2369296k(1906648k free)
+
+vm_info: Java HotSpot(TM) Client VM (1.6.0_03-b05) for windows-x86, built on Sep 24 2007 22:24:33 by "java_re" with unknown MS VC++:1310
+

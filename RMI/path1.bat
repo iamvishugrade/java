@@ -1,0 +1,1 @@
+set path=C:\bea\jdk141_02\bin;

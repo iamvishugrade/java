@@ -1,0 +1,151 @@
+ Table structure in MySQL as follows :
+use test;
+create table Emp
+(
+code varchar(10) primary key,
+name varchar(40) null,
+city varchar(20),
+salary int
+);
+insert into Emp values('a001','Ram Kumar','Noida',10000);
+
+Here creating different type of Stored Procedure in MySQL database server and call in Java source code
+Stored Procedure without parameter
+
+We create a stored procedure without parameter in MySQL database server. I create proc1 procedure, it shows average salary of employee from EMP table.  
+SQL statement for stored procedure
+
+DELIMITER //
+
+CREATE PROCEDURE proc1()
+BEGIN
+   SELECT Avg(salary) AS salary
+   FROM emp;
+END; //
+
+DELIMITER ;
+Here is the Java source code to call stored procedure proc1 from database
+
+// This method use proc1 procedure
+// proc1 display average salary of employee from EMP table
+public void callProcedure1() {
+  try {
+    clmt = con.prepareCall("{call proc1}");
+    ResultSet res = clmt.executeQuery();
+    if (res.next()) {
+      System.out.println(res.getString(1));
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+Stored procedure that return records from table
+
+We create a stored procedure without parameter in MySQL database server. I create proc2 procedure, it shows whole employee records from EMP table
+ 
+SQL statement for stored procedure
+
+DELIMITER //
+
+CREATE PROCEDURE proc2()
+BEGIN
+   SELECT * FROM emp;
+END; //
+
+DELIMITER ;
+Here is the Java source code to call stored procedure proc2 from database
+// This method use proc2 procedure
+// It displays the whole records from Emp table
+public void callProcedure2() {
+  try {
+    clmt = con.prepareCall("{call proc2}");
+    ResultSet res = clmt.executeQuery();
+    while (res.next()) {
+      System.out.println(res.getString(1) + "\t" + res.getString(2)
+          + "\t" + res.getString(3) + "\t" + res.getString(4));
+    }
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+Stored procedure with two IN parameter
+
+We create a stored procedure with parameter in MySQL database server. I create a procedure - proc3, it takes two input parameters as an employee code and employee name and store it in Emp table  
+SQL statement for stored procedure
+DELIMITER //
+
+CREATE PROCEDURE proc3(IN code1 varchar(10),IN name1 varchar(10))
+BEGIN
+   insert into emp(code,name) values(code1,name1);
+END; //
+
+DELIMITER ;
+Here is the Java source code to call stored procedure proc3 from database
+// call procedure proc3 with two IN parameters and store in emp table
+public void callProcedure3(String code, String name) {
+  try {
+    clmt = con.prepareCall("{call proc3(?,?)}");
+    clmt.setString(1, code);
+    clmt.setString(2, name);
+    int i = clmt.executeUpdate();
+    if (i != 0)
+      System.out.println("Inserted successfully");
+    else
+      System.out.println("Not Inserted");
+  } catch (Exception e) {
+  }
+}
+Stored procedure with one IN and OUT parameter
+
+We create a stored procedure with parameter in MySQL database server. I create proc4 procedure, it takes an input parameter as employee code and return employee name as an OUTPUT parameter from EMP table  
+SQL statement for stored procedure
+DELIMITER //
+
+CREATE PROCEDURE proc4(IN code1 varchar(10),OUT name1 varchar(10))
+BEGIN
+  SELECT name from emp where code=code1
+  INTO name1;
+END; //
+
+DELIMITER ;
+Here is the Java source code to call stored procedure proc4 from database
+// procedure with one in and one out parameter
+// It takes emp code as parameter and return emp name as output parameter
+public void callProcedure4(String code) {
+  try {
+    clmt = con.prepareCall("{call proc4(?,?)}");
+    clmt.setString(1, code);
+    clmt.registerOutParameter(2, Types.VARCHAR);
+    clmt.execute();
+    System.out.println(clmt.getString(2));
+  } catch (Exception e) {
+  }
+}
+Stored procedure with INOUT parameter
+
+We create a stored procedure with parameter in MySQL database server. I create proc5 procedure, it takes an input parameter as employee code and return employee name as an OUTPUT parameter using INOUT parameter from EMP table  
+SQL statement for stored procedure
+DELIMITER //
+
+CREATE PROCEDURE proc5(INOUT var1 varchar(20))
+BEGIN
+  SELECT name from emp where code=var1
+  INTO var1;
+END; //
+
+DELIMITER ;
+Download SQL statement
+Here is the Java source code to call stored procedure proc5 from database
+
+// proc5 procedure takes one IN parameter and return value in OUT parameter
+// It uses single INOUT parameter for both purpose
+public void callProcedure5(String var1) {
+  try {
+    clmt = con.prepareCall("{call proc5(?)}");
+    clmt.registerOutParameter(1, Types.VARCHAR);
+    clmt.setString(1, var1);
+    clmt.execute();
+    System.out.println(clmt.getString(1));
+  } catch (Exception e) {
+  }
+}

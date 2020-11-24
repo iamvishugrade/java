@@ -1,0 +1,10 @@
+<web-app>
+<servlet>
+<servlet-name>UploadFileWithRestriction</servlet-name>
+<servlet-class>UploadFileWithRestriction</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>UploadFileWithRestriction</servlet-name>
+<url-pattern>/uploadWithRestriction</url-pattern>
+</servlet-mapping>
+</web-app>

@@ -1,0 +1,6 @@
+create or replace  function sum22(one in number,two in number) return number as total number;
+begin
+total:=one+two;
+return total;
+end;
+/

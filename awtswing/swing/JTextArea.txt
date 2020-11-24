@@ -1,0 +1,76 @@
+ A JTextArea can handle multiline plain text.
+
+A JTextArea does not provide scrolling by itself, we need to put JTextField to a JScrollPane to have scrolling capability.
+
+We can set the number of rows and columns for a JTextArea to set its preferred size.
+
+The following table lists the constructors of the JTextArea Class.
+ID	Constructor/Description
+1	JTextArea()
+Creates a JTextArea with a default model, initial string as null, and rows/columns as zero.
+2	JTextArea(Document doc)
+Creates a JTextArea with the specified doc as its model. Its initial string is set to null, and rows/columns to zero.
+3	JTextArea(Document doc, String text, int rows, int columns)
+Creates a JTextArea with all its properties (model, initial text, rows, and column) as specified in its arguments.
+4	JTextArea(int rows, int columns)
+Creates a JTextArea with a default model, initial string as null, and the specified rows/columns.
+5	JTextArea(String text)
+Creates a JTextArea with the specified initial text. A default model is set and rows/columns are set to zero.
+6	JTextArea(String text, int rows, int columns)
+Creates a JTextArea with the specified text, rows, and columns. A default model is used.
+
+The following code shows how to create JTextArea using different initial values.
+
+To Create a blank JTextArea
+
+JTextArea emptyTextArea  = new JTextArea();
+
+To create a JTextArea with 10 rows and 50 columns
+
+JTextArea commentsTextArea  = new JTextArea(10, 50);
+
+To Create a JTextArea with 10 rows and 50 columns with an initial text of "Enter resume here"
+
+JTextArea resumeTextArea = new JTextArea("Enter resume here", 10, 50);
+
+To add the scrolling capability to a JTextArea, we add it to a JScrollPane.
+
+The following code shows how to make a JTextArea scrollable
+
+JTextArea  resumeTextArea = new JTextArea("Enter resume  here", 10,   50);
+JScrollPane sp  = new JScrollPane(resumeTextArea);
+Container contentPane = myFrame.getContentPane();
+
+The following table lists some of the commonly used methods of a JTextArea.
+
+Most of the time, we will use its setText(), getText(), and append() methods.
+ID	Method/Description
+1	void append(String text)
+Appends the specified text to the end of the JTextArea.
+2	int getLineCount()
+Returns the number of lines in the JTextArea.
+3	int getLineStartOffset(int line) throws BadLocationException
+Returns the start offset for a specified line number.
+4	int getLineEndOffset(int line) throws BadLocationException
+Returns the end offset for a specified line number.
+5	int getLineOfOffset(int offset) throws BadLocationException
+Returns the line number in which the specified offset occurs.
+6	boolean getLineWrap()
+Returns true if line wrapping has been set. Otherwise, it returns false.
+7	int getTabSize()
+Returns the number of characters used for a tab. By default, it returns 8.
+8	boolean getWrapStyleWord()
+Returns true if word wrapping has been set to true. Otherwise, it returns false.
+9	void insert(String text, int offset)
+Inserts the specified text at the specified offset.
+10	void replaceRange(String text, int start, int end)
+Replaces the text between the start and end positions with the specified text.
+11	void setLineWrap(boolean wrap)
+Sets the line-wrapping policy for the JTextArea.
+12	void setTabSize(int size)
+Sets the number of characters that a tab will expand to the specified size.
+13	void setWrapStyleWord(boolean word)
+Sets the word-wrapping style when line wrapping is set to true.
+
+By default, the line wrapping is set to false. The line wrapping is set using the setLineWrap(boolean lineWrap) method.
+

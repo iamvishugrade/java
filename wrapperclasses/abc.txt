@@ -1,0 +1,6 @@
+Compiled from Comparable.java
+public interface java.lang.Comparable 
+    /* ACC_SUPER bit NOT set */
+{
+    public abstract int compareTo(java.lang.Object);
+}

@@ -1,0 +1,8 @@
+There are four types of constructors in HashMap as shown below :
+
+    HashMap (): It is a default hash map.
+    HashMap (Map m): It initializes the hash map by using the elements of m.
+    HashMap (int capacity): It initializes the capacity of the hash map to capacity. The default initial capacity of HashMap will be 16 and the load factor will be 0.75.Load factor represents at what level HashMap should be doubled.
+    HashMap (int capacity, float fillRatio): It initializes both capacity and fill ratio by using its arguments.
+
+
